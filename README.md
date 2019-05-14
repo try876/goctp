@@ -37,3 +37,7 @@ make build
 ```
 make example
 ```
+
+## FAQ
+
+1. [[golang]如何在windows上使用cgo]([golang]如何在windows上使用cgo)
