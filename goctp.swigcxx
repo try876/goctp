@@ -9,49 +9,6 @@
 %init %{ 
   //printf("Initialization qerio.goctp done.\n");
 %}
-
-%typemap(gotype) (char **ppInstrumentID, int nCount) "[]string"
-
-%typemap(in) (char **ppInstrumentID, int nCount)
-%{
-  {
-    int i;
-    _gostring_* a;
-
-    $2 = $input.len;
-    a = (_gostring_*) $input.array;
-    $1 = (char **) malloc (($2 + 1) * sizeof (char *));
-    for (i = 0; i < $2; i++) {
-      
-      /* Not work */
-      //_gostring_ *ps = &a[i];
-      //$1[i] = (char *) ps->p;
-      //$1[i][ps->n] = '\0';
-
-      /*Work well*/
-      _gostring_ *ps = &a[i];
-      $1[i] = (char*) malloc(ps->n + 1);
-      memcpy($1[i], ps->p, ps->n);
-      $1[i][ps->n] = '\0';
-
-    }
-    $1[i] = NULL;
-  }
-%}
-
-%typemap(argout) (char **ppInstrumentID, int nCount) "" /* override char *[] default */
-
-%typemap(freearg) (char **ppInstrumentID, int nCount)
-%{
-  {
-    int i;
-    for (i = 0; i < $2; i++)
-    {
-      free ($1[i]);
-    }
-    free($1);
-  }
-%}
  
 
 /* 在复杂的企业环境中，可能有一些 C/C++ 头文件定义了您希望向脚本框架公开的全局变量和常量。
